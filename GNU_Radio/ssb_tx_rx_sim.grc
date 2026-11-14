@@ -1,0 +1,878 @@
+options:
+  parameters:
+    author: Bloc 1 - simulations pédagogiques
+    catch_exceptions: 'True'
+    category: '[GRC Hier Blocks]'
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: Message -> filtre de Hilbert à 48 kHz (x + j.H{x}) -> rééchantillonneur -> BLU supérieure en bande de base -> FI -> bruit -> OL -> filtre passe-bande complexe 300-3000 Hz -> partie réelle
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    hier_block_src_path: '.:'
+    id: ssb_tx_rx_sim
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: 'BLU : émetteur (Hilbert / Hartley) et récepteur en simulation'
+    window_size: (1000,1000)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 8
+    - 8
+    rotation: 0
+    state: enabled
+blocks:
+- name: import_math
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: 'import math'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 16
+    rotation: 0
+    state: enabled
+- name: audio_rate
+  id: variable
+  parameters:
+    alias: ''
+    comment: ''
+    value: '48000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 189
+    - 16
+    rotation: 0
+    state: enabled
+- name: interp
+  id: variable
+  parameters:
+    alias: ''
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 337
+    - 16
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    alias: ''
+    comment: ''
+    value: 'audio_rate*interp'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 485
+    - 16
+    rotation: 0
+    state: enabled
+- name: fc
+  id: qtgui_range
+  parameters:
+    alias: ''
+    comment: ''
+    value: '10e3'
+    start: '5e3'
+    stop: '40e3'
+    step: '500'
+    label: 'Fréquence de la porteuse fc (Hz)'
+    widget: 'counter_slider'
+    rangeType: 'float'
+    gui_hint: '0,0,1,1'
+    orient: 'QtCore.Qt.Horizontal'
+    min_len: '200'
+    outputmsgname: 'value'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 691
+    - 16
+    rotation: 0
+    state: enabled
+- name: noise_amp
+  id: qtgui_range
+  parameters:
+    alias: ''
+    comment: ''
+    value: '0.0'
+    start: '0'
+    stop: '1'
+    step: '0.01'
+    label: 'Amplitude du bruit du canal'
+    widget: 'counter_slider'
+    rangeType: 'float'
+    gui_hint: '0,1,1,1'
+    orient: 'QtCore.Qt.Horizontal'
+    min_len: '200'
+    outputmsgname: 'value'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 973
+    - 16
+    rotation: 0
+    state: enabled
+- name: lo_phase
+  id: qtgui_range
+  parameters:
+    alias: ''
+    comment: ''
+    value: '0.0'
+    start: '-3.14'
+    stop: '3.14'
+    step: '0.01'
+    label: 'Déphasage de l OL récepteur (rad)'
+    widget: 'counter_slider'
+    rangeType: 'float'
+    gui_hint: '0,2,1,1'
+    orient: 'QtCore.Qt.Horizontal'
+    min_len: '200'
+    outputmsgname: 'value'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1243
+    - 16
+    rotation: 0
+    state: enabled
+- name: fm
+  id: qtgui_range
+  parameters:
+    alias: ''
+    comment: ''
+    value: '1000'
+    start: '300'
+    stop: '2700'
+    step: '10'
+    label: 'Fréquence du message fm (Hz)'
+    widget: 'counter_slider'
+    rangeType: 'float'
+    gui_hint: '1,0,1,1'
+    orient: 'QtCore.Qt.Horizontal'
+    min_len: '200'
+    outputmsgname: 'value'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1525
+    - 16
+    rotation: 0
+    state: enabled
+- name: msg
+  id: analog_sig_source_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'float'
+    samp_rate: 'audio_rate'
+    waveform: 'analog.GR_COS_WAVE'
+    freq: 'fm'
+    amp: '1'
+    offset: '0'
+    phase: '0'
+    showports: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 190
+    rotation: 0
+    state: enabled
+- name: throttle
+  id: blocks_throttle
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'float'
+    samples_per_second: 'audio_rate'
+    vlen: '1'
+    ignoretag: 'True'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 330
+    - 220
+    rotation: 0
+    state: enabled
+- name: resampler
+  id: rational_resampler_xxx
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'fff'
+    interp: 'interp'
+    decim: '1'
+    taps: '[]'
+    fbw: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 625
+    - 488
+    rotation: 0
+    state: enabled
+- name: hilbert
+  id: hilbert_fc
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_taps: '129'
+    win: 'window.WIN_HAMMING'
+    beta: '6.76'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 625
+    - 213
+    rotation: 0
+    state: enabled
+- name: lsb_conj
+  id: blocks_conjugate_cc
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 380
+    rotation: 0
+    state: disabled
+- name: resampler_c
+  id: rational_resampler_xxx
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'ccf'
+    interp: 'interp'
+    decim: '1'
+    taps: '[]'
+    fbw: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 908
+    - 213
+    rotation: 0
+    state: enabled
+- name: lo_tx
+  id: analog_sig_source_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'complex'
+    samp_rate: 'samp_rate'
+    waveform: 'analog.GR_COS_WAVE'
+    freq: 'fc'
+    amp: '1'
+    offset: '0'
+    phase: '0'
+    showports: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 908
+    - 358
+    rotation: 0
+    state: enabled
+- name: mix_tx
+  id: blocks_multiply_xx
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'complex'
+    num_inputs: '2'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1222
+    - 295
+    rotation: 0
+    state: enabled
+- name: noise
+  id: analog_noise_source_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'complex'
+    noise_type: 'analog.GR_GAUSSIAN'
+    amp: 'noise_amp'
+    seed: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1222
+    - 443
+    rotation: 0
+    state: enabled
+- name: channel
+  id: blocks_add_xx
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'complex'
+    num_inputs: '2'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1498
+    - 617
+    rotation: 0
+    state: enabled
+- name: lo_rx
+  id: analog_sig_source_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'complex'
+    samp_rate: 'samp_rate'
+    waveform: 'analog.GR_COS_WAVE'
+    freq: '-fc'
+    amp: '1'
+    offset: '0'
+    phase: 'lo_phase'
+    showports: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 1116
+    rotation: 0
+    state: enabled
+- name: mix_rx
+  id: blocks_multiply_xx
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'complex'
+    num_inputs: '2'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 375
+    - 1137
+    rotation: 0
+    state: enabled
+- name: spectre_fi
+  id: qtgui_freq_sink_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'complex'
+    name: '""'
+    fftsize: '4096'
+    wintype: 'window.WIN_BLACKMAN_hARRIS'
+    fc: '0'
+    bw: 'samp_rate'
+    nconnections: '1'
+    average: '0.2'
+    ymin: '-120'
+    ymax: '10'
+    update_time: '0.10'
+    grid: 'True'
+    autoscale: 'False'
+    gui_hint: '6,0,1,2'
+    legend: 'True'
+    axislabels: 'True'
+    ctrlpanel: 'False'
+    fftavg: 'False'
+    showports: 'False'
+    norm_window: 'False'
+    label: 'Relative Gain'
+    units: 'dB'
+    freqhalf: 'True'
+    tr_mode: 'qtgui.TRIG_MODE_FREE'
+    tr_level: '0.0'
+    tr_chan: '0'
+    tr_tag: '""'
+    label1: 'Signal reçu (émis + bruit du canal)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1857
+    - 856
+    rotation: 0
+    state: enabled
+- name: emis_reel
+  id: blocks_complex_to_real
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1498
+    - 311
+    rotation: 0
+    state: enabled
+- name: spectre_emis
+  id: qtgui_freq_sink_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'float'
+    name: '""'
+    fftsize: '8192'
+    wintype: 'window.WIN_BLACKMAN_hARRIS'
+    fc: '0'
+    bw: 'samp_rate'
+    nconnections: '1'
+    average: '1.0'
+    ymin: '-100'
+    ymax: '10'
+    update_time: '0.10'
+    grid: 'True'
+    autoscale: 'False'
+    gui_hint: '3,0,1,2'
+    legend: 'True'
+    axislabels: 'True'
+    ctrlpanel: 'False'
+    fftavg: 'False'
+    showports: 'False'
+    norm_window: 'False'
+    label: 'Relative Gain'
+    units: 'dB'
+    freqhalf: 'True'
+    tr_mode: 'qtgui.TRIG_MODE_FREE'
+    tr_level: '0.0'
+    tr_chan: '0'
+    tr_tag: '""'
+    label1: 'Spectre du signal modulé émis s(t)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1857
+    - 289
+    rotation: 0
+    state: enabled
+- name: lpf_rx
+  id: low_pass_filter
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'fir_filter_ccf'
+    decim: 'interp'
+    interp: '1'
+    gain: '1'
+    samp_rate: 'samp_rate'
+    cutoff_freq: '5e3'
+    width: '2e3'
+    win: 'window.WIN_HAMMING'
+    beta: '6.76'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 702
+    - 1116
+    rotation: 0
+    state: enabled
+- name: sideband
+  id: band_pass_filter
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'fir_filter_ccc'
+    decim: '1'
+    interp: '1'
+    gain: '1'
+    samp_rate: 'audio_rate'
+    low_cutoff_freq: '300'
+    high_cutoff_freq: '3000'
+    width: '200'
+    win: 'window.WIN_HAMMING'
+    beta: '6.76'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 991
+    - 1131
+    rotation: 0
+    state: enabled
+- name: to_real
+  id: blocks_complex_to_real
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1286
+    - 1160
+    rotation: 0
+    state: enabled
+- name: msg_retarde
+  id: blocks_delay
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'float'
+    delay: '398'
+    num_ports: '1'
+    vlen: '1'
+    showports: 'False'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 625
+    - 358
+    rotation: 0
+    state: enabled
+- name: scope
+  id: qtgui_time_sink_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'float'
+    name: '""'
+    size: '2048'
+    srate: 'audio_rate'
+    nconnections: '2'
+    autoscale: 'False'
+    ymin: '-2'
+    ymax: '2'
+    update_time: '0.10'
+    grid: 'True'
+    entags: 'False'
+    gui_hint: '4,0,1,2'
+    legend: 'True'
+    ylabel: 'Amplitude'
+    yunit: '""'
+    tr_mode: 'qtgui.TRIG_MODE_FREE'
+    tr_level: '0.0'
+    tr_delay: '0'
+    tr_chan: '0'
+    tr_slope: 'qtgui.TRIG_SLOPE_POS'
+    tr_tag: '""'
+    axislabels: 'True'
+    ctrlpanel: 'False'
+    stemplot: 'False'
+    label1: 'Message émis, retardé de 398 échantillons (retard des filtres)'
+    label2: 'Message démodulé'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1613
+    - 1131
+    rotation: 0
+    state: enabled
+- name: scope_emis
+  id: qtgui_time_sink_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'float'
+    name: '""'
+    size: '2048'
+    srate: 'samp_rate'
+    nconnections: '2'
+    autoscale: 'False'
+    ymin: '-1.5'
+    ymax: '1.5'
+    update_time: '0.10'
+    grid: 'True'
+    entags: 'False'
+    gui_hint: '2,0,1,2'
+    legend: 'True'
+    ylabel: 'Amplitude'
+    yunit: '""'
+    tr_mode: 'qtgui.TRIG_MODE_FREE'
+    tr_level: '0.0'
+    tr_delay: '0'
+    tr_chan: '0'
+    tr_slope: 'qtgui.TRIG_SLOPE_POS'
+    tr_tag: '""'
+    axislabels: 'True'
+    ctrlpanel: 'False'
+    stemplot: 'False'
+    label1: 'Signal BLU émis s(t)'
+    label2: 'Message x(t)'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1857
+    - 681
+    rotation: 0
+    state: enabled
+- name: spectre_bb
+  id: qtgui_freq_sink_x
+  parameters:
+    alias: ''
+    comment: ''
+    affinity: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: 'complex'
+    name: '""'
+    fftsize: '4096'
+    wintype: 'window.WIN_BLACKMAN_hARRIS'
+    fc: '0'
+    bw: 'audio_rate'
+    nconnections: '1'
+    average: '0.2'
+    ymin: '-120'
+    ymax: '10'
+    update_time: '0.10'
+    grid: 'True'
+    autoscale: 'False'
+    gui_hint: '5,0,1,2'
+    legend: 'True'
+    axislabels: 'True'
+    ctrlpanel: 'False'
+    fftavg: 'False'
+    showports: 'False'
+    norm_window: 'False'
+    label: 'Relative Gain'
+    units: 'dB'
+    freqhalf: 'True'
+    tr_mode: 'qtgui.TRIG_MODE_FREE'
+    tr_level: '0.0'
+    tr_chan: '0'
+    tr_tag: '""'
+    label1: 'Bande de base après sélection de la bande latérale'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1286
+    - 1276
+    rotation: 0
+    state: enabled
+connections:
+- - msg
+  - '0'
+  - throttle
+  - '0'
+- - throttle
+  - '0'
+  - resampler
+  - '0'
+- - throttle
+  - '0'
+  - hilbert
+  - '0'
+- - hilbert
+  - '0'
+  - resampler_c
+  - '0'
+- - resampler_c
+  - '0'
+  - mix_tx
+  - '0'
+- - lo_tx
+  - '0'
+  - mix_tx
+  - '1'
+- - mix_tx
+  - '0'
+  - channel
+  - '0'
+- - noise
+  - '0'
+  - channel
+  - '1'
+- - channel
+  - '0'
+  - mix_rx
+  - '0'
+- - lo_rx
+  - '0'
+  - mix_rx
+  - '1'
+- - channel
+  - '0'
+  - spectre_fi
+  - '0'
+- - mix_tx
+  - '0'
+  - emis_reel
+  - '0'
+- - emis_reel
+  - '0'
+  - spectre_emis
+  - '0'
+- - mix_rx
+  - '0'
+  - lpf_rx
+  - '0'
+- - lpf_rx
+  - '0'
+  - sideband
+  - '0'
+- - sideband
+  - '0'
+  - to_real
+  - '0'
+- - throttle
+  - '0'
+  - msg_retarde
+  - '0'
+- - msg_retarde
+  - '0'
+  - scope
+  - '0'
+- - to_real
+  - '0'
+  - scope
+  - '1'
+- - emis_reel
+  - '0'
+  - scope_emis
+  - '0'
+- - resampler
+  - '0'
+  - scope_emis
+  - '1'
+- - sideband
+  - '0'
+  - spectre_bb
+  - '0'
+metadata:
+  file_format: 1
+  grc_version: 3.10.9.2

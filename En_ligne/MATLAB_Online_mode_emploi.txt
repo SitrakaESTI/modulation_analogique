@@ -1,0 +1,21 @@
+Exécuter les modèles Simulink dans MATLAB Online (gratuit, 20 h par mois, Simulink inclus)
+=========================================================================================
+
+1. Ouvrir https://matlab.mathworks.com et se connecter avec un compte MathWorks
+   (création gratuite). La version « MATLAB Online (basic) » suffit.
+2. Dans le panneau « Files », envoyer (Upload) les dossiers Simulink et MATLAB
+   du ZIP en conservant leur emplacement côte à côte.
+3. Se placer dans le dossier Simulink, puis taper dans la fenêtre de commande :
+       construire_et_verifier_modeles
+4. Le script construit mod_am, mod_fm et mod_pm, exporte leur schéma réel
+   (mod_xx_schema.png), les simule sans bruit puis avec bruit, ouvre chaque Scope
+   et affiche « OK » / « ECHEC » pour le signal émis et le signal démodulé.
+5. Résultats attendus (guide, tableaux 3.01, 4.01 et 4.03) :
+     AM : enveloppe émise de 0,5 à 1,5 ; bandes latérales à -12,04 dB ;
+          RSB de sortie > 40 dB sans bruit, environ 21 dB avec sigma2 = 0,02
+     FM : fréquence émise de 5 kHz à 15 kHz ; 5 000 Hz restitués ; environ 33 dB avec bruit
+     PM : écart de phase émis de ±1,5 rad ; 1,5 rad restitués ; environ 30 dB avec bruit
+   Dans chaque Scope, le 2e tracé montre le signal modulé : enveloppe AM, oscillations
+   serrées/espacées en FM, avance/retard sur la porteuse en pointillés en PM.
+Remarque : en version basic, un calcul continu est limité à 15 minutes ; chaque
+modèle se simule en quelques secondes.

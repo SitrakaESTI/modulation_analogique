@@ -1,0 +1,64 @@
+# Exécution réelle des simulateurs : MATLAB/Simulink (gratuit pour un dépôt PUBLIC) et GNU Radio 3.10.
+# Résultats téléchargeables dans l'onglet Actions > dernière exécution > Artifacts.
+name: Simulations AM BLU FM PM
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  simulink:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: matlab-actions/setup-matlab@v2
+        with:
+          release: R2024b
+          products: Simulink
+      - uses: matlab-actions/run-command@v2
+        with:
+          command: v = ver; fid = fopen('Simulink/versions.txt', 'w'); fprintf(fid, 'MATLAB %s\n', version); for k = 1:numel(v), fprintf(fid, '%s %s %s\n', v(k).Name, v(k).Version, v(k).Release); end; fclose(fid); type('Simulink/versions.txt'); cd('Simulink'); construire_et_verifier_modeles
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: resultats-simulink
+          path: |
+            Simulink/*.slx
+            Simulink/*.png
+            Simulink/versions.txt
+            Simulink/journal_matlab.txt
+  gnuradio:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Installer GNU Radio
+        run: sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get install -y gnuradio python3-scipy python3-matplotlib
+      - name: Versions utilisees
+        run: |
+          mkdir -p resultats_gnuradio
+          { echo "GNU Radio $(gnuradio-config-info --version)"; lsb_release -ds; python3 --version; python3 -c 'import numpy, scipy; print("numpy", numpy.__version__, "scipy", scipy.__version__)'; } | tee resultats_gnuradio/versions.txt
+      - name: Executer les graphes de flux (vrais blocs GNU Radio, compiles par grcc)
+        run: python3 En_ligne/executer_grc_ci.py 2>&1 | tee resultats_gnuradio/journal_gnuradio.txt; exit ${PIPESTATUS[0]}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: resultats-gnuradio
+          path: resultats_gnuradio/
+  publier:
+    # copie des résultats dans la branche « resultats » du dépôt : lisibles sans connexion
+    needs: [simulink, gnuradio]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: resultats
+      - name: Publier dans la branche resultats
+        run: |
+          cd resultats
+          git init -q && git checkout -q -b resultats
+          git config user.name "github-actions" && git config user.email "actions@github.com"
+          echo "Execution ${GITHUB_RUN_ID} du $(date -u) ; simulink=${{ needs.simulink.result }} ; gnuradio=${{ needs.gnuradio.result }}" > ETAT.txt
+          git add -A && git commit -qm "Resultats de l'execution ${GITHUB_RUN_ID}"
+          git push -qf "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" resultats

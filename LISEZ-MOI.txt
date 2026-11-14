@@ -1,0 +1,49 @@
+Émetteurs et récepteurs AM, BLU, FM et PM : simulateurs Simulink et GNU Radio
+==============================================================================
+
+Toutes les simulations fonctionnent SANS matériel de radio logicielle
+(pas de HackRF, RTL-SDR, USRP, PlutoSDR, bladeRF ni LimeSDR). Le canal est un
+bruit blanc additif gaussien. Porteuse de 10 kHz pour que le signal modulé soit
+lisible à l'oscilloscope. Le guide (Guide_..._v4.docx) donne chaque schéma bloc,
+la liste de ses blocs et, en dessous, le résultat de son exécution.
+
+1. Simulink  (le simulateur principal)
+   - construire_et_verifier_modeles.m : construit mod_am.slx, mod_fm.slx et
+     mod_pm.slx avec les mêmes blocs, liaisons et positions que les schémas du
+     guide ; exporte le schéma réel (mod_xx_schema.png) ; simule sans bruit puis
+     avec bruit ; ouvre les Scope (signal modulé émis visible) ; contrôle le
+     signal émis et le signal démodulé (« OK » / « ECHEC »).
+
+2. GNU Radio 3.10  (ouvrir avec gnuradio-companion, puis exécuter)
+   - am_tx_rx_sim.grc   : AM ; scope_emis montre la porteuse et son enveloppe ;
+                          comparaison Repeat / rééchantillonneur incluse
+   - ssb_tx_rx_sim.grc  : BLU par filtre de Hilbert à 48 kHz (activer lsb_conj pour la BLI)
+   - fm_tx_rx_sim.grc   : FM, excursion réglable ; scope_emis montre la variation de fréquence
+   - pm_tx_rx_sim.grc   : PM avec dérotation ; scope_emis superpose la porteuse non modulée
+   Curseurs : fréquence de la porteuse, amplitude du bruit, déphasage de l'oscillateur
+   local, paramètre de la modulation. Le message émis est retardé (bloc Delay) du temps
+   de traversée des filtres pour être superposé au message démodulé.
+   - verification/verifier_grc.py : contrôle structurel et réinterprétation numérique
+     des graphes de flux sans GNU Radio (python3 verifier_grc.py ../*.grc).
+
+3. En_ligne  (exécution réelle sans installation locale)
+   - Executer_GNU_Radio_sur_Colab.ipynb : Google Colab, « Tout exécuter », envoyer ce ZIP.
+   - colab_tools.py : conversion des .grc (afficheurs QT -> Vector Sink) et exécution.
+   - MATLAB_Online_mode_emploi.txt : exécuter les modèles Simulink dans MATLAB Online.
+
+4. MATLAB  (scripts d'étude, pour la compréhension ; aucune boîte à outils)
+   - lancer_tout.m, sim01_am_dbl_blu.m, sim02_fm_pm.m, sim04_interpolation.m, outils/
+
+5. Python_reference  (numpy, scipy, matplotlib) : implémentation de référence.
+
+6. Schemas  (images en pleine résolution)
+   - Simulink/   : schémas blocs des trois modèles
+   - GNU_Radio/  : graphes de flux tels qu'ils s'ouvrent dans GRC
+   - Resultats/  : oscilloscopes Simulink et afficheurs QT GUI obtenus à l'exécution
+
+La FSK est traitée au thème suivant.
+
+Remarque : les modèles et graphes n'ont pas été exécutés dans MATLAB ni dans GNU Radio
+lors de leur préparation (logiciels absents de l'environnement de travail). Les
+courbes de Schemas/Resultats proviennent d'une réexécution bloc par bloc des mêmes
+modèles. Utiliser le dossier En_ligne pour obtenir les captures réelles.

@@ -14,13 +14,13 @@ def phase(x, f, fs=48000.0):
     c = np.linalg.lstsq(A, x, rcond=None)[0]; return np.arctan2(-c[1], c[0]), np.hypot(c[0], c[1])
 def retard_reel(nom, val):
     """retard (en échantillons à 48 kHz) du message démodulé par rapport au message affiché,
-    mesuré sur les vrais blocs avec deux fréquences de message (1 000 et 300 Hz) pour lever l'ambiguïté"""
+    mesuré sur les vrais blocs avec cinq fréquences de message pour lever l'ambiguïté de période"""
     L = {}
-    for f in (1000.0, 300.0):
+    for f in (1000.0, 300.0, 700.0, 1100.0, 470.0):
         tb, d = C.executer(os.path.join(G, nom + '.grc'), duree=1.5, out_dir=os.path.join(OUT, 'hl'), fm=f, **val)
         a, b = [np.asarray(v) for v in d['scope'][1]]; n = min(len(a), len(b)); a, b = a[n // 2:n], b[n // 2:n]
         pa, _ = phase(a, f); pb, amp = phase(b, f); L[f] = ((pa - pb) / (2 * np.pi * f / 48000.0), 48000.0 / f, amp)
-    cand = np.arange(-480, 481)
+    cand = np.arange(-4000, 4001)
     err = sum(np.abs(((cand - l) + p / 2) % p - p / 2) for l, p, _ in L.values())
     return int(cand[np.argmin(err)]), float(err.min()), {str(int(f)): round(v[2], 4) for f, v in L.items()}
 def mesures(nom, d):

@@ -87,10 +87,11 @@ hws.assignin('sigma2', 0.02); so = sim(mdl, 'ReturnWorkspaceOutputs', 'on');   %
 y = so.get('env'); y = y(2001:10000) - mean(y(2001:10000));
 fprintf('     AM : RSB de sortie avec sigma2 = 0.02 : %.1f dB (reference : 20.9 dB)\n', rsb_tonalite(y, 1e3, 200e3));
 if usejava('desktop'), open_system([mdl '/Scope']); end   % oscilloscope de la dernière simulation (canal bruité)
-f = figure('Visible', 'off', 'Position', [0 0 900 600]); t = (0:numel(so.get('sam'))-1)/200e3*1e3; k = t >= 5 & t <= 8;
-e = so.get('env'); s = so.get('sam'); subplot(2,1,1); plot(t(k), s(k)); title('mod\_am : signal AM emis s(t)'); grid on;
-subplot(2,1,2); plot(t(k), e(k)); title('Enveloppe demodulee (sigma2 = 0,02)'); xlabel('Temps (ms)'); grid on;
-exportgraphics(f, fullfile(ici, 'mod_am_resultat.png')); close(f);
+f = figure('Visible', 'off', 'Position', [0 0 1000 900]); s = so.get('sam'); e = so.get('env'); t = (0:numel(s)-1).'/200e3; k = t >= 5e-3 & t <= 8e-3; x = cos(2*pi*1e3*t);
+subplot(3,1,1); plot(t(k)*1e3, x(k), 'LineWidth', 1); title('Message x(t)'); grid on;
+subplot(3,1,2); plot(t(k)*1e3, s(k), t(k)*1e3, 1 + 0.5*x(k), '--', t(k)*1e3, -(1 + 0.5*x(k)), '--', 'LineWidth', 1); title('Signal AM emis s(t) et enveloppe \pm(1 + m.x(t))'); grid on;
+subplot(3,1,3); plot(t(k)*1e3, e(k), 'LineWidth', 1); title('Enveloppe demodulee |I + jQ| (sigma2 = 0,02)'); xlabel('Temps (ms)'); grid on;
+sgtitle(sprintf('mod\_am - MATLAB %s', version('-release'))); exportgraphics(f, fullfile(ici, 'mod_am_resultat.png'), 'Resolution', 150); close(f);
 save_system(mdl);
 
 %% ===================== Modèle Simulink FM : intégrateur, porteuse, canal et discriminateur I/Q =====================
@@ -179,10 +180,11 @@ ntot = ntot+1; nok = nok + verifier('FM : amplitude restituee (Hz)', a, 5e3, 60)
 hws.assignin('sigma2', 0.02); so = sim(mdl, 'ReturnWorkspaceOutputs', 'on');   % même modèle, canal bruité
 y = so.get('yfm'); fprintf('     FM : RSB de sortie avec sigma2 = 0.02 : %.1f dB (reference : 33.1 dB)\n', rsb_tonalite(y(2001:10000), 1e3, 200e3));
 if usejava('desktop'), open_system([mdl '/Scope']); end   % oscilloscope de la dernière simulation (canal bruité)
-f = figure('Visible', 'off', 'Position', [0 0 900 600]); t = (0:numel(so.get('sfm'))-1)/200e3*1e3; k = t >= 5 & t <= 8;
-s = so.get('sfm'); y = so.get('yfm'); subplot(2,1,1); plot(t(k), s(k)); title('mod\_fm : signal FM emis s(t)'); grid on;
-subplot(2,1,2); plot(t(k), y(k)); title('Ecart de frequence demodule (Hz), sigma2 = 0,02'); xlabel('Temps (ms)'); grid on;
-exportgraphics(f, fullfile(ici, 'mod_fm_resultat.png')); close(f);
+f = figure('Visible', 'off', 'Position', [0 0 1000 900]); s = so.get('sfm'); y = so.get('yfm'); t = (0:numel(s)-1).'/200e3; k = t >= 5e-3 & t <= 8e-3; x = cos(2*pi*1e3*t);
+subplot(3,1,1); plot(t(k)*1e3, x(k), 'LineWidth', 1); title('Message x(t)'); grid on;
+subplot(3,1,2); plot(t(k)*1e3, s(k), 'LineWidth', 1); title('Signal FM emis : de 5 kHz (x = -1) a 15 kHz (x = +1)'); grid on;
+subplot(3,1,3); plot(t(k)*1e3, y(k), 'LineWidth', 1); title('Ecart de frequence demodule (Hz), sigma2 = 0,02'); xlabel('Temps (ms)'); grid on;
+sgtitle(sprintf('mod\_fm - MATLAB %s', version('-release'))); exportgraphics(f, fullfile(ici, 'mod_fm_resultat.png'), 'Resolution', 150); close(f);
 save_system(mdl);
 
 %% ===================== Modèle Simulink PM : modulateur de phase, canal et démodulateur par argument =====================
@@ -263,10 +265,11 @@ hws.assignin('sigma2', 0.02); so = sim(mdl, 'ReturnWorkspaceOutputs', 'on');   %
 y = so.get('ypm'); y = y(2001:10000) - mean(y(2001:10000));
 fprintf('     PM : RSB de sortie avec sigma2 = 0.02 : %.1f dB (reference : 29.9 dB)\n', rsb_tonalite(y, 1e3, 200e3));
 if usejava('desktop'), open_system([mdl '/Scope']); end   % oscilloscope de la dernière simulation (canal bruité)
-f = figure('Visible', 'off', 'Position', [0 0 900 600]); t = (0:numel(so.get('spm'))-1)/200e3; k = t >= 5e-3 & t <= 8e-3;
-s = so.get('spm'); y = so.get('ypm'); subplot(2,1,1); plot(t(k)*1e3, s(k), t(k)*1e3, cos(2*pi*10e3*t(k) + 0.7), '--'); title('mod\_pm : signal PM emis et porteuse non modulee'); grid on;
-subplot(2,1,2); plot(t(k)*1e3, y(k)); title('Phase demodulee (rad), sigma2 = 0,02'); xlabel('Temps (ms)'); grid on;
-exportgraphics(f, fullfile(ici, 'mod_pm_resultat.png')); close(f);
+f = figure('Visible', 'off', 'Position', [0 0 1000 900]); s = so.get('spm'); y = so.get('ypm'); t = (0:numel(s)-1).'/200e3; k = t >= 5e-3 & t <= 8e-3; x = cos(2*pi*1e3*t);
+subplot(3,1,1); plot(t(k)*1e3, 1.5*x(k), 'LineWidth', 1); title('Phase du message k_p.x(t) (rad)'); grid on;
+subplot(3,1,2); plot(t(k)*1e3, s(k), t(k)*1e3, cos(2*pi*10e3*t(k) + 0.7), '--', 'LineWidth', 1); title('Signal PM emis (trait plein) et porteuse non modulee (pointilles)'); grid on;
+subplot(3,1,3); plot(t(k)*1e3, y(k), 'LineWidth', 1); title('Phase demodulee (rad), sigma2 = 0,02'); xlabel('Temps (ms)'); grid on;
+sgtitle(sprintf('mod\_pm - MATLAB %s', version('-release'))); exportgraphics(f, fullfile(ici, 'mod_pm_resultat.png'), 'Resolution', 150); close(f);
 save_system(mdl);
 
 fprintf('\nBilan Simulink : %d controles reussis sur %d\n', nok, ntot);

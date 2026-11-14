@@ -4,12 +4,12 @@
 modèles **MATLAB Simulink** et graphes de flux **GNU Radio 3.10**, avec le guide
 `Cours_Bloc2_Theme3_Emetteurs_recepteurs_AM_BLU_FM_PM.docx` (schémas blocs, liste des blocs, résultats, exercices) et `Corrige_Exercices_Bloc2_Theme3.docx`.
 
-Dépôt : https://github.com/SitrakaEnseignant/modulation_analogique
+Dépôt : https://github.com/SitrakaEnseignant/theme3_modulation_analogique
 
 ## Résultats
 - Résultats réels figés (images, journaux, versions) : [`Schemas/Resultats_reels`](Schemas/Resultats_reels)
-- Derniers résultats : branche [`resultats`](https://github.com/SitrakaEnseignant/modulation_analogique/tree/resultats)
-- Historique des exécutions : onglet [Actions](https://github.com/SitrakaEnseignant/modulation_analogique/actions)
+- Derniers résultats : branche [`resultats`](https://github.com/SitrakaEnseignant/theme3_modulation_analogique/tree/resultats)
+- Historique des exécutions : onglet [Actions](https://github.com/SitrakaEnseignant/theme3_modulation_analogique/actions)
 
 ## Exécution automatique (GitHub Actions)
 À chaque envoi sur `main`, le workflow `.github/workflows/simulations.yml` :

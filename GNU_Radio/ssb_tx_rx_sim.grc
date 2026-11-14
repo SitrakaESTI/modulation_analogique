@@ -640,7 +640,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     type: 'float'
-    delay: '398'
+    delay: '366'
     num_ports: '1'
     vlen: '1'
     showports: 'False'
@@ -685,7 +685,7 @@ blocks:
     axislabels: 'True'
     ctrlpanel: 'False'
     stemplot: 'False'
-    label1: 'Message émis, retardé de 398 échantillons (retard des filtres)'
+    label1: 'Message émis, retardé de 366 échantillons (retard mesuré dans GNU Radio 3.10.9.2)'
     label2: 'Message démodulé'
   states:
     bus_sink: false

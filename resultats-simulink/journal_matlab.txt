@@ -1,0 +1,14 @@
+OK    AM emis : enveloppe maximale : 1.500 (attendu 1.500 +/- 0.01)
+OK    AM emis : enveloppe minimale : 0.500 (attendu 0.500 +/- 0.01)
+OK    AM emis : bande laterale 11 kHz (dB / porteuse) : -12.041 (attendu -12.040 +/- 0.1)
+AM : RSB sans bruit = 77.4 dB (> 40 dB attendu)
+     AM : RSB de sortie avec sigma2 = 0.02 : 20.5 dB (reference : 20.9 dB)
+OK    FM emis : frequence instantanee max (Hz) : 14987.159 (attendu 15000.000 +/- 100)
+OK    FM emis : frequence instantanee min (Hz) : 5023.730 (attendu 5000.000 +/- 100)
+OK    FM : amplitude restituee (Hz) : 5021.925 (attendu 5000.000 +/- 60)
+     FM : RSB de sortie avec sigma2 = 0.02 : 33.0 dB (reference : 33.1 dB)
+OK    PM emis : ecart de phase / porteuse (rad) : 1.500 (attendu 1.500 +/- 0.02)
+OK    PM : amplitude restituee (rad) : 1.508 (attendu 1.500 +/- 0.03)
+     PM : RSB de sortie avec sigma2 = 0.02 : 28.9 dB (reference : 29.9 dB)
+
+Bilan Simulink : 9 controles reussis sur 9

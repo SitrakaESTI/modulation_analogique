@@ -1,0 +1,77 @@
+vmcircbuf_prefs::get :info: /home/runner/.gnuradio/prefs/vmcircbuf_default_factory failed to open: bad true, fail true, eof true
+am_tx_rx_sim {
+ "ecart_efficace": 0.027963950327793596,
+ "correlation": 0.9992292438346095,
+ "enveloppe_min": 0.4935759015158401,
+ "enveloppe_max": 1.5058154725762163,
+ "frequence_inst_min": 9862.612060655629,
+ "frequence_inst_max": 10139.587538812597,
+ "decalage_supplementaire_echantillons": 0,
+ "residu_mesure_decalage": 1.4999997119900499,
+ "amplitude_demodulee": {
+  "1000": 1.004,
+  "300": 1.0013,
+  "700": 1.0042,
+  "1100": 1.0034,
+  "470": 1.0027
+ },
+ "correlation_lo_phase_2.0": 0.9992294899834545,
+ "correlation_lo_phase_-2.5": 0.9992295470690055
+}
+ssb_tx_rx_sim {
+ "ecart_efficace": 0.02811494613832176,
+ "correlation": 0.9992276765840484,
+ "enveloppe_min": 0.9990899798333821,
+ "enveloppe_max": 1.0031448787177224,
+ "frequence_inst_min": 10989.617967109929,
+ "frequence_inst_max": 11008.848638747802,
+ "decalage_supplementaire_echantillons": 0,
+ "residu_mesure_decalage": 1.502591213515764,
+ "amplitude_demodulee": {
+  "1000": 1.0053,
+  "300": 0.4346,
+  "700": 1.0076,
+  "1100": 1.0053,
+  "470": 0.973
+ },
+ "correlation_lo_phase_2.0": -0.3803451698828129,
+ "correlation_lo_phase_-2.5": -0.8240217365138005
+}
+fm_tx_rx_sim {
+ "ecart_efficace": 0.023217839985818823,
+ "correlation": 0.9994615538914022,
+ "enveloppe_min": 0.9976488935025936,
+ "enveloppe_max": 1.0022446212675038,
+ "frequence_inst_min": 5008.352003314104,
+ "frequence_inst_max": 14996.574032597953,
+ "decalage_supplementaire_echantillons": 0,
+ "residu_mesure_decalage": 1.249964678815683,
+ "amplitude_demodulee": {
+  "1000": 0.9982,
+  "300": 0.9972,
+  "700": 0.9987,
+  "1100": 0.9965,
+  "470": 0.9965
+ },
+ "correlation_lo_phase_2.0": 0.9994613589066194,
+ "correlation_lo_phase_-2.5": 0.9994613589288852
+}
+pm_tx_rx_sim {
+ "ecart_efficace": 0.027776127833045675,
+ "correlation": 0.9992292047185436,
+ "enveloppe_min": 0.9960701310516726,
+ "enveloppe_max": 1.0041315344803488,
+ "frequence_inst_min": 8480.792677125362,
+ "frequence_inst_max": 11515.329661750478,
+ "decalage_supplementaire_echantillons": 0,
+ "residu_mesure_decalage": 1.499996863720547,
+ "amplitude_demodulee": {
+  "1000": 1.0006,
+  "300": 1.0005,
+  "700": 1.0006,
+  "1100": 1.0006,
+  "470": 1.0007
+ },
+ "correlation_lo_phase_2.0": 0.9992294540593808,
+ "correlation_lo_phase_-2.5": 0.9992294536800876
+}

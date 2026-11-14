@@ -2,7 +2,7 @@
 
 Émetteurs et récepteurs **AM, BLU, FM et PM** en simulation pure (aucun matériel SDR) :
 modèles **MATLAB Simulink** et graphes de flux **GNU Radio 3.10**, avec le guide
-`Guide_emetteurs_recepteurs_AM_BLU_FM_PM_v6.docx` (schémas blocs, liste des blocs, résultats).
+`Cours_Bloc2_Theme3_Emetteurs_recepteurs_AM_BLU_FM_PM.docx` (schémas blocs, liste des blocs, résultats, exercices) et `Corrige_Exercices_Bloc2_Theme3.docx`.
 
 Dépôt : https://github.com/SitrakaEnseignant/modulation_analogique
 

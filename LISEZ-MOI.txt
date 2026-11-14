@@ -4,7 +4,7 @@
 Toutes les simulations fonctionnent SANS matériel de radio logicielle
 (pas de HackRF, RTL-SDR, USRP, PlutoSDR, bladeRF ni LimeSDR). Le canal est un
 bruit blanc additif gaussien. Porteuse de 10 kHz pour que le signal modulé soit
-lisible à l'oscilloscope. Le guide (Guide_..._v6.docx) donne chaque schéma bloc,
+lisible à l'oscilloscope. Le cours (Cours_Bloc2_Theme3_...docx) donne chaque schéma bloc,
 la liste de ses blocs et, en dessous, le résultat de son exécution.
 
 1. Simulink  (le simulateur principal)

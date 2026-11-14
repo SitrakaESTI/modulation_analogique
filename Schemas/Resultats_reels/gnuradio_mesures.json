@@ -1,0 +1,78 @@
+{
+ "am_tx_rx_sim": {
+  "ecart_efficace": 0.027963950313893905,
+  "correlation": 0.9992292438354351,
+  "enveloppe_min": 0.4935759015158401,
+  "enveloppe_max": 1.5058154725762163,
+  "frequence_inst_min": 9862.612060655629,
+  "frequence_inst_max": 10139.587538812597,
+  "decalage_supplementaire_echantillons": 0,
+  "residu_mesure_decalage": 1.4999997116312862,
+  "amplitude_demodulee": {
+   "1000": 1.004,
+   "300": 1.0013,
+   "700": 1.0042,
+   "1100": 1.0034,
+   "470": 1.0027
+  },
+  "correlation_lo_phase_2.0": 0.9992294899822026,
+  "correlation_lo_phase_-2.5": 0.999229491777406
+ },
+ "ssb_tx_rx_sim": {
+  "ecart_efficace": 0.02811494914233041,
+  "correlation": 0.9992276764113602,
+  "enveloppe_min": 0.9990899724590215,
+  "enveloppe_max": 1.0031448859869148,
+  "frequence_inst_min": 10989.61793207053,
+  "frequence_inst_max": 11008.84860250689,
+  "decalage_supplementaire_echantillons": 0,
+  "residu_mesure_decalage": 1.5025913431772864,
+  "amplitude_demodulee": {
+   "1000": 1.0053,
+   "300": 0.4346,
+   "700": 1.0076,
+   "1100": 1.0053,
+   "470": 0.973
+  },
+  "correlation_lo_phase_2.0": -0.3803451652761544,
+  "correlation_lo_phase_-2.5": -0.8240217320326031
+ },
+ "fm_tx_rx_sim": {
+  "ecart_efficace": 0.02321783996979503,
+  "correlation": 0.9994615538921314,
+  "enveloppe_min": 0.9976488934992936,
+  "enveloppe_max": 1.002244621270834,
+  "frequence_inst_min": 5008.3520031653,
+  "frequence_inst_max": 14996.574032560897,
+  "decalage_supplementaire_echantillons": 0,
+  "residu_mesure_decalage": 1.249964680562119,
+  "amplitude_demodulee": {
+   "1000": 0.9982,
+   "300": 0.9972,
+   "700": 0.9987,
+   "1100": 0.9965,
+   "470": 0.9965
+  },
+  "correlation_lo_phase_2.0": 0.9994613589050988,
+  "correlation_lo_phase_-2.5": 0.9994613589260147
+ },
+ "pm_tx_rx_sim": {
+  "ecart_efficace": 0.027776126145029792,
+  "correlation": 0.9992292048149989,
+  "enveloppe_min": 0.9960701310519193,
+  "enveloppe_max": 1.0041315344800774,
+  "frequence_inst_min": 8480.792677088244,
+  "frequence_inst_max": 11515.329661676367,
+  "decalage_supplementaire_echantillons": 0,
+  "residu_mesure_decalage": 1.4999968467308484,
+  "amplitude_demodulee": {
+   "1000": 1.0006,
+   "300": 1.0005,
+   "700": 1.0006,
+   "1100": 1.0006,
+   "470": 1.0007
+  },
+  "correlation_lo_phase_2.0": 0.9992294541473812,
+  "correlation_lo_phase_-2.5": 0.9992294538144304
+ }
+}

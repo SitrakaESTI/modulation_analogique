@@ -91,7 +91,7 @@ f = figure('Visible', 'off', 'Position', [0 0 1000 900]); s = so.get('sam'); e =
 subplot(3,1,1); plot(t(k)*1e3, x(k), 'LineWidth', 1); title('Message x(t)'); grid on;
 subplot(3,1,2); plot(t(k)*1e3, s(k), t(k)*1e3, 1 + 0.5*x(k), '--', t(k)*1e3, -(1 + 0.5*x(k)), '--', 'LineWidth', 1); title('Signal AM emis s(t) et enveloppe \pm(1 + m.x(t))'); grid on;
 subplot(3,1,3); plot(t(k)*1e3, e(k), 'LineWidth', 1); title('Enveloppe demodulee |I + jQ| (sigma2 = 0,02)'); xlabel('Temps (ms)'); grid on;
-sgtitle(sprintf('mod\_am - MATLAB %s', version('-release'))); exportgraphics(f, fullfile(ici, 'mod_am_resultat.png'), 'Resolution', 150); close(f);
+sgtitle(['mod\_am  -  MATLAB R' version('-release')]); exportgraphics(f, fullfile(ici, 'mod_am_resultat.png'), 'Resolution', 150); close(f);
 save_system(mdl);
 
 %% ===================== Modèle Simulink FM : intégrateur, porteuse, canal et discriminateur I/Q =====================
@@ -184,7 +184,7 @@ f = figure('Visible', 'off', 'Position', [0 0 1000 900]); s = so.get('sfm'); y =
 subplot(3,1,1); plot(t(k)*1e3, x(k), 'LineWidth', 1); title('Message x(t)'); grid on;
 subplot(3,1,2); plot(t(k)*1e3, s(k), 'LineWidth', 1); title('Signal FM emis : de 5 kHz (x = -1) a 15 kHz (x = +1)'); grid on;
 subplot(3,1,3); plot(t(k)*1e3, y(k), 'LineWidth', 1); title('Ecart de frequence demodule (Hz), sigma2 = 0,02'); xlabel('Temps (ms)'); grid on;
-sgtitle(sprintf('mod\_fm - MATLAB %s', version('-release'))); exportgraphics(f, fullfile(ici, 'mod_fm_resultat.png'), 'Resolution', 150); close(f);
+sgtitle(['mod\_fm  -  MATLAB R' version('-release')]); exportgraphics(f, fullfile(ici, 'mod_fm_resultat.png'), 'Resolution', 150); close(f);
 save_system(mdl);
 
 %% ===================== Modèle Simulink PM : modulateur de phase, canal et démodulateur par argument =====================
@@ -269,7 +269,7 @@ f = figure('Visible', 'off', 'Position', [0 0 1000 900]); s = so.get('spm'); y =
 subplot(3,1,1); plot(t(k)*1e3, 1.5*x(k), 'LineWidth', 1); title('Phase du message k_p.x(t) (rad)'); grid on;
 subplot(3,1,2); plot(t(k)*1e3, s(k), t(k)*1e3, cos(2*pi*10e3*t(k) + 0.7), '--', 'LineWidth', 1); title('Signal PM emis (trait plein) et porteuse non modulee (pointilles)'); grid on;
 subplot(3,1,3); plot(t(k)*1e3, y(k), 'LineWidth', 1); title('Phase demodulee (rad), sigma2 = 0,02'); xlabel('Temps (ms)'); grid on;
-sgtitle(sprintf('mod\_pm - MATLAB %s', version('-release'))); exportgraphics(f, fullfile(ici, 'mod_pm_resultat.png'), 'Resolution', 150); close(f);
+sgtitle(['mod\_pm  -  MATLAB R' version('-release')]); exportgraphics(f, fullfile(ici, 'mod_pm_resultat.png'), 'Resolution', 150); close(f);
 save_system(mdl);
 
 fprintf('\nBilan Simulink : %d controles reussis sur %d\n', nok, ntot);

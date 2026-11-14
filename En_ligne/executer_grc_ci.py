@@ -8,6 +8,21 @@ ICI = os.path.dirname(os.path.abspath(__file__)); RACINE = os.path.dirname(ICI)
 sys.path.insert(0, ICI); import colab_tools as C
 G = os.path.join(RACINE, 'GNU_Radio'); OUT = os.path.join(RACINE, 'resultats_gnuradio'); os.makedirs(OUT, exist_ok=True)
 R = {}
+def phase(x, f, fs=48000.0):
+    x = np.asarray(x, float); t = np.arange(len(x)) / fs
+    A = np.column_stack([np.cos(2 * np.pi * f * t), np.sin(2 * np.pi * f * t), np.ones_like(t)])
+    c = np.linalg.lstsq(A, x, rcond=None)[0]; return np.arctan2(-c[1], c[0]), np.hypot(c[0], c[1])
+def retard_reel(nom, val):
+    """retard (en échantillons à 48 kHz) du message démodulé par rapport au message affiché,
+    mesuré sur les vrais blocs avec deux fréquences de message (1 000 et 300 Hz) pour lever l'ambiguïté"""
+    L = {}
+    for f in (1000.0, 300.0):
+        tb, d = C.executer(os.path.join(G, nom + '.grc'), duree=1.5, out_dir=os.path.join(OUT, 'hl'), fm=f, **val)
+        a, b = [np.asarray(v) for v in d['scope'][1]]; n = min(len(a), len(b)); a, b = a[n // 2:n], b[n // 2:n]
+        pa, _ = phase(a, f); pb, amp = phase(b, f); L[f] = ((pa - pb) / (2 * np.pi * f / 48000.0), 48000.0 / f, amp)
+    cand = np.arange(-480, 481)
+    err = sum(np.abs(((cand - l) + p / 2) % p - p / 2) for l, p, _ in L.values())
+    return int(cand[np.argmin(err)]), float(err.min()), {str(int(f)): round(v[2], 4) for f, v in L.items()}
 def mesures(nom, d):
     a, b = [np.asarray(v) for v in d['scope'][1]]; n = min(len(a), len(b)); a, b = a[n // 2:n], b[n // 2:n]
     r = {'ecart_efficace': float(np.sqrt(np.mean((a - b) ** 2))), 'correlation': float(np.corrcoef(a, b)[0, 1])}
@@ -32,6 +47,8 @@ def figure(nom, d):
 for nom, val in (('am_tx_rx_sim', {}), ('ssb_tx_rx_sim', {'lo_phase': 0.0}), ('fm_tx_rx_sim', {}), ('pm_tx_rx_sim', {})):
     tb, d = C.executer(os.path.join(G, nom + '.grc'), duree=2.0, out_dir=os.path.join(OUT, 'hl'), **val)
     R[nom] = mesures(nom, d); figure(nom, d)
+    dl, e, amps = retard_reel(nom, val)
+    R[nom]['decalage_supplementaire_echantillons'] = dl; R[nom]['residu_mesure_decalage'] = e; R[nom]['amplitude_demodulee'] = amps
     for ph in (2.0, -2.5):
         tb, d2 = C.executer(os.path.join(G, nom + '.grc'), duree=1.0, out_dir=os.path.join(OUT, 'hl'), lo_phase=ph)
         R[nom][f'correlation_lo_phase_{ph}'] = mesures(nom, d2)['correlation']

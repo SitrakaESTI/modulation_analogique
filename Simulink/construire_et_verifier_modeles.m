@@ -73,7 +73,7 @@ add_line(mdl, 'Canal/1', 'Scope/3', 'autorouting', 'on');
 add_line(mdl, 'Enveloppe/1', 'Scope/4', 'autorouting', 'on');
 save_system(mdl, fullfile(ici, [mdl '.slx']));
 if usejava('desktop'), open_system(mdl); end
-print(['-s' mdl], '-dpng', '-r150', fullfile(ici, [mdl '_schema.png']));   % schéma bloc exporté par Simulink
+try, print(['-s' mdl], '-dpng', '-r150', fullfile(ici, [mdl '_schema.png'])); catch err, fprintf('Schema non exporte : %s\n', err.message); end   % schéma bloc exporté par Simulink
 hws.assignin('sigma2', 0); so = sim(mdl, 'ReturnWorkspaceOutputs', 'on');
 % signal émis : enveloppe 1 +/- m et raies à fc et fc +/- fm
 s = so.get('sam'); s = s(K); a = abs(signal_analytique(s)); a = a(500:end-500);
@@ -167,7 +167,7 @@ add_line(mdl, 'cos/1', 'Scope/2', 'autorouting', 'on');
 add_line(mdl, 'Filtre de sortie/1', 'Scope/3', 'autorouting', 'on');
 save_system(mdl, fullfile(ici, [mdl '.slx']));
 if usejava('desktop'), open_system(mdl); end
-print(['-s' mdl], '-dpng', '-r150', fullfile(ici, [mdl '_schema.png']));   % schéma bloc exporté par Simulink
+try, print(['-s' mdl], '-dpng', '-r150', fullfile(ici, [mdl '_schema.png'])); catch err, fprintf('Schema non exporte : %s\n', err.message); end   % schéma bloc exporté par Simulink
 hws.assignin('sigma2', 0); so = sim(mdl, 'ReturnWorkspaceOutputs', 'on');
 % signal émis : fréquence instantanée de fc - df à fc + df
 s = so.get('sfm'); s = s(K); fi = diff(unwrap(angle(signal_analytique(s(:))))) * 200e3/(2*pi);
@@ -251,7 +251,7 @@ add_line(mdl, 'Mux PM/1', 'Scope/2', 'autorouting', 'on');
 add_line(mdl, 'Filtre de sortie/1', 'Scope/3', 'autorouting', 'on');
 save_system(mdl, fullfile(ici, [mdl '.slx']));
 if usejava('desktop'), open_system(mdl); end
-print(['-s' mdl], '-dpng', '-r150', fullfile(ici, [mdl '_schema.png']));   % schéma bloc exporté par Simulink
+try, print(['-s' mdl], '-dpng', '-r150', fullfile(ici, [mdl '_schema.png'])); catch err, fprintf('Schema non exporte : %s\n', err.message); end   % schéma bloc exporté par Simulink
 hws.assignin('sigma2', 0); so = sim(mdl, 'ReturnWorkspaceOutputs', 'on');
 % signal émis : écart de phase avec la porteuse non modulée = kp.x(t)
 s = so.get('spm'); t = (0:numel(s)-1).'/200e3; d = angle(signal_analytique(s(:)) .* exp(-1j*(2*pi*10e3*t + 0.7)));

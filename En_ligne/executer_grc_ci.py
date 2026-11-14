@@ -34,13 +34,18 @@ def mesures(nom, d):
 def figure(nom, d):
     fig, ax = plt.subplots(3, 1, figsize=(10, 8))
     xs = d['scope_emis'][1]
-    for k, x in enumerate(xs): ax[0].plot(np.asarray(x)[-2048:], lw=0.8, ls='-' if k == 0 else '--')
+    m = min(len(x) for x in xs)
+    for k, x in enumerate(xs): ax[0].plot(np.arange(1440) / 480.0, np.asarray(x)[m - 1440:m], lw=0.9 if k == 0 else 1.2, ls='-' if k == 0 else '--')
+    ax[0].set_xlabel('temps (ms)')
     ax[0].set_title(f'{nom} : scope_emis (signal modulé émis)')
     x = np.asarray(d['spectre_emis'][1][0]); N = 8192; w = np.hanning(N)
     P = np.mean([np.abs(np.fft.rfft(x[i:i + N] * w)) ** 2 for i in range(len(x) // 2, len(x) - N, N // 2)], 0)
     f = np.fft.rfftfreq(N, 1 / 480e3); k = f < 25e3
     ax[1].plot(f[k] / 1e3, 10 * np.log10(P[k] / P.max() + 1e-16)); ax[1].set_ylim(-100, 5); ax[1].set_title('spectre_emis (kHz)')
-    for v in d['scope'][1]: ax[2].plot(np.asarray(v)[-480:], lw=0.9)
+    a, b = [np.asarray(v) for v in d['scope'][1]]; n = min(len(a), len(b))   # mêmes indices : même instant
+    ax[2].plot(np.arange(480) / 48.0, a[n - 480:n], lw=1.6, label='message émis retardé')
+    ax[2].plot(np.arange(480) / 48.0, b[n - 480:n], lw=0.9, ls='--', label='message démodulé'); ax[2].legend(loc='upper right')
+    ax[2].set_xlabel('temps (ms)')
     ax[2].set_title('scope : message émis retardé et message démodulé')
     for a in ax: a.grid(ls=':')
     fig.tight_layout(); fig.savefig(os.path.join(OUT, f'{nom}.png'), dpi=120); plt.close(fig)
